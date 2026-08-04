@@ -1,38 +1,43 @@
 from src.parser.client_a_parser import ClientAParser
-from src.validation.date_validation import convert_dates
-from src.validation.duplicate_validation import remove_duplicate_members
-from src.validation.phone_validation import validate_phone_numbers
 from src.validation.claim_validation import remove_invalid_claims
 
 
 def main():
 
-    parser = ClientAParser(
+    # ---------------- Membership ----------------
+    membership_parser = ClientAParser(
         "data/raw/Patient-membership-clientA-202307.xlsx"
     )
 
-    df = parser.read_file()
+    membership_df = membership_parser.read_file()
 
-    df = parser.standardize_columns(df)
+    membership_df = membership_parser.standardize_columns(membership_df)
 
-    df = convert_dates(df)
+    print("Membership Data")
+    print(membership_df.head())
 
-    print("Before removing duplicates:", len(df))
+    print("=" * 80)
 
-    # Check duplicates BEFORE removing them
-    print("Duplicate member IDs:",
-          df["member_id"].duplicated().sum())
+    # ---------------- Claims ----------------
+    claim_parser = ClientAParser(
+        "data/raw/Patient-claim-clientA-202307.xlsx"
+    )
 
-    df = remove_duplicate_members(df)
+    claim_df = claim_parser.read_file()
+    claim_df = claim_parser.read_file()
 
-    print("After removing duplicates:", len(df))
-    df = validate_phone_numbers(df)
+    claim_df = claim_parser.standardize_claim_columns(claim_df)
+    claim_df = remove_invalid_claims(claim_df)
 
-    print(df[["member_id", "phone_number"]].head())
-    df = remove_invalid_claims(df)
-    
+    print(claim_df.columns.tolist())
 
-    print(df.head())
+    print("Claim Data")
+    print(claim_df.head())
+    final_df = membership_df.merge(claim_df,on="member_id",how="inner")
+
+    print("Final Joined Records:", len(final_df))
+
+    print(final_df.head())
 
 
 if __name__ == "__main__":

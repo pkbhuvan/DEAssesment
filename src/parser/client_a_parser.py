@@ -10,7 +10,6 @@ class ClientAParser:
         return pd.read_excel(self.file_path)
 
     def standardize_columns(self, df):
-
         column_mapping = {
             "member id": "member_id",
             "member first name": "first_name",
@@ -28,5 +27,22 @@ class ClientAParser:
         }
 
         df.rename(columns=column_mapping, inplace=True)
+        return df
 
+    def standardize_claim_columns(self, df):
+        column_mapping = {
+            "claim category": "claim_category",
+            "member id": "member_id",
+            "claim number": "claim_number",
+            "date received": "date_received",
+            "vendor": "vendor",
+            "hospital service": "hospital_service",
+            "coding system": "coding_system",
+            "code": "code",
+            "primary diagnosis": "primary_diagnosis",
+            "total billed": "total_billed",
+            "processing status": "processing_status"
+        }
+
+        df.rename(columns=column_mapping, inplace=True)
         return df
