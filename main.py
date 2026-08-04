@@ -14,13 +14,14 @@ from src.transformation.join_data import join_membership_claims
 
 def main():
 
-    # Create parser object (only for column standardization)
+    # Create parser object (only for column standardization) 
     parser = ClientAParser(None)
 # ====================================================
 # Membership Data
 # ====================================================
 
     membership_df = read_membership_files()
+    print(membership_df.columns.tolist())
 
     # Standardize column names FIRST
     membership_df = parser.standardize_columns(membership_df)
@@ -46,9 +47,14 @@ def main():
     # ====================================================
 
     claim_df = read_claim_files()
+    print(claim_df.columns.tolist())
 
+    
     claim_df = parser.standardize_claim_columns(claim_df)
-
+    # print("After standardization:")
+    print(claim_df.columns.tolist())
+    print(claim_df.head())
+    # print(claim_df[["claim_number"]].head(10))
     claim_df = remove_invalid_claims(claim_df)
     # load_dataframe(claim_df, "claims")
     print("=" * 80)
@@ -63,7 +69,10 @@ def main():
     #     on="member_id",
     #     how="inner"
     # )
-
+    print("Membership IDs")
+    print(membership_df["member_id"].head(10))
+    print("Claim IDs")
+    print(claim_df["member_id"].head(10))
     final_df = join_membership_claims(membership_df,claim_df)
     # load_dataframe(final_df, "member_claims")
     print(final_df.head())

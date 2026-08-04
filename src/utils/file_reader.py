@@ -4,7 +4,7 @@ import pandas as pd
 
 def read_membership_files():
 
-    files = glob.glob("data/raw/Patient-membership-clientA-*.xlsx")
+    files = glob.glob("data/raw/Patient-membership-*.xlsx")
 
     dfs = []
 
@@ -17,7 +17,7 @@ def read_membership_files():
 
 def read_claim_files():
 
-    files = glob.glob("data/raw/Patient-claim-clientA-*.xlsx")
+    files = glob.glob("data/raw/Patient-claim-*.xlsx")
 
     dfs = []
 
