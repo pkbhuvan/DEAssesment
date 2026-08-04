@@ -2,6 +2,7 @@ from src.parser.client_a_parser import ClientAParser
 from src.validation.date_validation import convert_dates
 from src.validation.duplicate_validation import remove_duplicate_members
 from src.validation.phone_validation import validate_phone_numbers
+from src.validation.claim_validation import remove_invalid_claims
 
 
 def main():
@@ -28,6 +29,7 @@ def main():
     df = validate_phone_numbers(df)
 
     print(df[["member_id", "phone_number"]].head())
+    df = remove_invalid_claims(df)
     
 
     print(df.head())
