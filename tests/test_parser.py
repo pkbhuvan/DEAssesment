@@ -1,7 +1,5 @@
 import pandas as pd
-
 from src.parser.client_a_parser import ClientAParser
-
 
 def test_standardize_membership_columns():
 

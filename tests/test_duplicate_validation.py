@@ -1,7 +1,5 @@
 import pandas as pd
-
 from src.validation.duplicate_validation import remove_duplicate_members
-
 
 def test_remove_duplicate_members():
 

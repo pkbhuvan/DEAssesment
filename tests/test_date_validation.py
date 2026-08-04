@@ -1,8 +1,5 @@
 import pandas as pd
-
 from src.validation.date_validation import convert_dates
-
-
 def test_convert_dates():
 
     df = pd.DataFrame({

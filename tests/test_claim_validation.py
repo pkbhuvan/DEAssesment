@@ -1,8 +1,5 @@
 import pandas as pd
-
 from src.validation.claim_validation import remove_invalid_claims
-
-
 def test_remove_invalid_claims():
 
     df = pd.DataFrame({

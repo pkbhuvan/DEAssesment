@@ -1,11 +1,6 @@
 import pandas as pd
-
-
 def validate_phone_numbers(df):
-    """
-    Validate phone numbers.
-    A valid phone number should have exactly 10 digits.
-    """
+    """Validate phone numbers.A valid phone number should have exactly 10 digits."""
 
     def clean_phone(phone):
 

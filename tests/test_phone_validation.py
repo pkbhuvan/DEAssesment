@@ -1,8 +1,5 @@
 import pandas as pd
-
 from src.validation.phone_validation import validate_phone_numbers
-
-
 def test_validate_phone_numbers():
 
     df = pd.DataFrame({

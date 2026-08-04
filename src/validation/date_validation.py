@@ -1,11 +1,6 @@
 import pandas as pd
-
-
 def convert_dates(df):
-    """
-    Convert date columns to datetime format.
-    Invalid dates will become NaT.
-    """
+    """Convert date columns to datetime format.Invalid dates will become NaT."""
 
     date_columns = [
         "date_of_birth",
