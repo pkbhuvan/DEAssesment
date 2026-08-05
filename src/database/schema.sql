@@ -1,16 +1,39 @@
-from sqlalchemy import text
-from src.database.connection import engine
-from src.utils.logger import logger
+CREATE TABLE IF NOT EXISTS members (
+    member_id VARCHAR PRIMARY KEY,
+    first_name VARCHAR,
+    middle_name VARCHAR,
+    last_name VARCHAR,
+    gender VARCHAR,
+    date_of_birth DATE,
+    address VARCHAR,
+    city VARCHAR,
+    state VARCHAR,
+    zip_code VARCHAR,
+    phone_number VARCHAR,
+    membership_end_date DATE,
+    ethnicity VARCHAR
+);
 
+CREATE TABLE IF NOT EXISTS claims (
+    claim_number VARCHAR PRIMARY KEY,
+    member_id VARCHAR,
+    date_received DATE,
+    hospital_service VARCHAR,
+    code_system VARCHAR,
+    cost_total NUMERIC,
+    status VARCHAR
+);
 
-def create_tables():
-
-    with open("src/database/schema.sql", "r") as file:
-        sql = file.read()
-
-    with engine.connect() as connection:
-
-        connection.execute(text(sql))
-        connection.commit()
-
-    logger.info("Database tables created successfully.")
+CREATE TABLE IF NOT EXISTS member_claims (
+    claim_number VARCHAR PRIMARY KEY,
+    member_id VARCHAR,
+    first_name VARCHAR,
+    last_name VARCHAR,
+    gender VARCHAR,
+    date_of_birth DATE,
+    membership_end_date DATE,
+    hospital_service VARCHAR,
+    code_system VARCHAR,
+    cost_total NUMERIC,
+    status VARCHAR
+);
