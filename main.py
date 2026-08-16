@@ -1,10 +1,9 @@
 from src.utils.logger import logger
 
-from src.parser.client_a_parser import ClientAParser
-
 from src.utils.file_reader import (
     read_membership_files,
     read_claim_files,
+    read_incremental_membership_files,
     read_incremental_claim_files,
 )
 
@@ -12,98 +11,173 @@ from src.validation.date_validation import convert_dates
 from src.validation.duplicate_validation import remove_duplicate_members
 from src.validation.phone_validation import validate_phone_numbers
 from src.validation.claim_validation import remove_invalid_claims
-from src.validation.membership_date_validation import validate_membership_dates
+from src.validation.membership_date_validation import (
+    validate_membership_dates
+)
 
-from src.transformation.join_data import join_membership_claims
-from src.transformation.upsert_data import upsert_claims
+from src.transformation.join_data import (
+    join_membership_claims
+)
+
+from src.transformation.upsert_data import (
+    upsert_members,
+    upsert_claims
+)
 
 from src.database.load_data import load_dataframe
 
 
 def main():
 
-    logger.info("Starting ETL Pipeline")
-
-    parser = ClientAParser(None)
+    logger.info(
+        "Starting ETL Pipeline"
+    )
 
     # ====================================================
-    # Membership Data Load
+    # INITIAL MEMBERSHIP LOAD
+    # Only TWO membership files
     # ====================================================
+
+    print("=" * 80)
+    print("INITIAL MEMBERSHIP LOAD")
 
     membership_df = read_membership_files()
 
-    print("=" * 80)
-    print("Raw Membership Columns")
-    print(membership_df.columns.tolist())
+    print(
+        "Standardized Membership Columns:"
+    )
 
-    membership_df = parser.standardize_columns(membership_df)
+    print(
+        membership_df.columns.tolist()
+    )
 
-    membership_df = convert_dates(membership_df)
+    # ----------------------------------------------------
+    # Date conversion
+    # ----------------------------------------------------
 
-    membership_df = validate_membership_dates(membership_df)
+    membership_df = convert_dates(
+        membership_df
+    )
 
-    membership_df = remove_duplicate_members(membership_df)
+    # ----------------------------------------------------
+    # Membership date validation
+    # ----------------------------------------------------
 
-    membership_df = validate_phone_numbers(membership_df)
+    membership_df = validate_membership_dates(
+        membership_df
+    )
 
-    print("=" * 80)
-    print("Membership Records:", len(membership_df))
+    # ----------------------------------------------------
+    # Remove duplicate members
+    # ----------------------------------------------------
 
-    logger.info(f"Membership Records: {len(membership_df)}")
+    membership_df = remove_duplicate_members(
+        membership_df
+    )
+
+    # ----------------------------------------------------
+    # Phone validation
+    # ----------------------------------------------------
+
+    membership_df = validate_phone_numbers(
+        membership_df
+    )
+
+    print(
+        "Membership Records:",
+        len(membership_df)
+    )
+
+    logger.info(
+        f"Membership Records: {len(membership_df)}"
+    )
 
     # ====================================================
-    # Claims Data Load
+    # INITIAL CLAIM LOAD
+    # Only TWO claim files
     # ====================================================
+
+    print("=" * 80)
+    print("INITIAL CLAIM LOAD")
 
     claim_df = read_claim_files()
 
-    print("=" * 80)
-    print("Raw Claim Columns")
-    print(claim_df.columns.tolist())
+    print(
+        "Standardized Claim Columns:"
+    )
 
-    claim_df = parser.standardize_claim_columns(claim_df)
+    print(
+        claim_df.columns.tolist()
+    )
 
-    print("=" * 80)
-    print("After Claim Standardization")
-    print(claim_df.columns.tolist())
-    print(claim_df.head())
+    print(
+        claim_df.head()
+    )
 
-    claim_df = remove_invalid_claims(claim_df)
+    # ----------------------------------------------------
+    # Remove invalid claims
+    # ----------------------------------------------------
 
-    print("=" * 80)
-    print("Claim Records:", len(claim_df))
+    claim_df = remove_invalid_claims(
+        claim_df
+    )
 
-    logger.info(f"Claim Records: {len(claim_df)}")
+    print(
+        "Claim Records:",
+        len(claim_df)
+    )
+
+    logger.info(
+        f"Claim Records: {len(claim_df)}"
+    )
 
     # ====================================================
-    # Validate Join Keys
+    # JOIN MEMBERSHIP + CLAIMS
     # ====================================================
 
     print("=" * 80)
-    print("Membership IDs")
-    print(membership_df["member_id"].head(10))
+    print("JOIN MEMBERSHIP + CLAIMS")
 
-    print("Claim IDs")
-    print(claim_df["member_id"].head(10))
+    print(
+        "Membership IDs:"
+    )
 
-    # ====================================================
-    # Join Membership + Claims
-    # ====================================================
+    print(
+        membership_df["member_id"].head(10)
+    )
+
+    print(
+        "Claim Member IDs:"
+    )
+
+    print(
+        claim_df["member_id"].head(10)
+    )
 
     final_df = join_membership_claims(
         membership_df,
         claim_df
     )
 
+    print(
+        "Final Joined Records:",
+        len(final_df)
+    )
+
+    print(
+        final_df.head()
+    )
+
+    logger.info(
+        f"Initial Joined Records: {len(final_df)}"
+    )
+
+    # ====================================================
+    # INITIAL DATABASE LOAD
+    # ====================================================
+
     print("=" * 80)
-    print("Final Joined Records:", len(final_df))
-    print(final_df.head())
-
-    logger.info(f"Final Joined Records: {len(final_df)}")
-
-    # ====================================================
-    # Load Initial Data
-    # ====================================================
+    print("INITIAL DATABASE LOAD")
 
     try:
 
@@ -123,7 +197,7 @@ def main():
         )
 
         logger.info(
-            "Initial data loaded successfully."
+            "Initial database load completed successfully."
         )
 
     except Exception as e:
@@ -132,68 +206,177 @@ def main():
             f"Initial database load failed: {e}"
         )
 
+        raise
+
     # ====================================================
-    # Incremental Claim Upsert (Set 2)
+    # SET 2
+    # INCREMENTAL MEMBERSHIP
+    # Third membership file only
     # ====================================================
 
     print("=" * 80)
-    print("Starting Incremental Claim Upsert")
+    print("INCREMENTAL MEMBERSHIP UPSERT")
 
-    incremental_claims = read_incremental_claim_files()
-
-    incremental_claims = parser.standardize_claim_columns(
-        incremental_claims
+    incremental_members = (
+        read_incremental_membership_files()
     )
 
-    incremental_claims = remove_invalid_claims(
-        incremental_claims
+    print(
+        "Incremental Membership Columns:"
     )
+
+    print(
+        incremental_members.columns.tolist()
+    )
+
+    # ----------------------------------------------------
+    # Apply same validations to incremental membership
+    # ----------------------------------------------------
+
+    incremental_members = convert_dates(
+        incremental_members
+    )
+
+    incremental_members = validate_membership_dates(
+        incremental_members
+    )
+
+    incremental_members = validate_phone_numbers(
+        incremental_members
+    )
+
+    # ----------------------------------------------------
+    # Membership Upsert
+    # ----------------------------------------------------
+
+    updated_members = upsert_members(
+        membership_df,
+        incremental_members
+    )
+
+    print(
+        "Existing Members:",
+        len(membership_df)
+    )
+
+    print(
+        "Incremental Members:",
+        len(incremental_members)
+    )
+
+    print(
+        "Members After Upsert:",
+        len(updated_members)
+    )
+
+    logger.info(
+        f"Members After Upsert: {len(updated_members)}"
+    )
+
+    # ====================================================
+    # SET 2
+    # INCREMENTAL CLAIM
+    # Third claim file only
+    # ====================================================
+
+    print("=" * 80)
+    print("INCREMENTAL CLAIM UPSERT")
+
+    incremental_claims = (
+        read_incremental_claim_files()
+    )
+
+    print(
+        "Incremental Claim Columns:"
+    )
+
+    print(
+        incremental_claims.columns.tolist()
+    )
+
+    incremental_claims = (
+        remove_invalid_claims(
+            incremental_claims
+        )
+    )
+
+    # ----------------------------------------------------
+    # Claim Upsert
+    # ----------------------------------------------------
 
     updated_claims = upsert_claims(
         claim_df,
         incremental_claims
     )
 
-    print("=" * 80)
-    print("Existing Claims:", len(claim_df))
-    print("After Upsert Claims:", len(updated_claims))
-    print(updated_claims.head())
+    print(
+        "Existing Claims:",
+        len(claim_df)
+    )
+
+    print(
+        "Incremental Claims:",
+        len(incremental_claims)
+    )
+
+    print(
+        "Claims After Upsert:",
+        len(updated_claims)
+    )
 
     logger.info(
         f"Claims After Upsert: {len(updated_claims)}"
     )
 
     # ====================================================
-    # Recreate Final Joined Data
+    # REBUILD FINAL RELATIONSHIP
     # ====================================================
 
+    print("=" * 80)
+    print("REBUILDING MEMBER + CLAIM RELATIONSHIP")
+
     updated_final_df = join_membership_claims(
-        membership_df,
+        updated_members,
         updated_claims
     )
 
+    print(
+        "Updated Final Joined Records:",
+        len(updated_final_df)
+    )
+
     # ====================================================
-    # Missing Members (Requirement 7c)
+    # FIND MISSING MEMBERS
     # ====================================================
 
-    missing_members = membership_df[
-        ~membership_df["member_id"].isin(
+    missing_members = updated_members[
+        ~updated_members["member_id"].isin(
             updated_claims["member_id"]
         )
-    ]
+    ].copy()
 
-    print("=" * 80)
-    print("Missing Members:", len(missing_members))
+    print(
+        "Missing Members:",
+        len(missing_members)
+    )
 
     logger.info(
         f"Missing Members: {len(missing_members)}"
     )
 
     # ====================================================
-    # Load Updated Data
+    # LOAD UPDATED DATA
     # ====================================================
 
+    print("=" * 80)
+    print("LOADING UPDATED DATA")
+
     try:
+
+        load_dataframe(
+            updated_members,
+            "members"
+        )
 
         load_dataframe(
             updated_claims,
@@ -211,7 +394,7 @@ def main():
         )
 
         logger.info(
-            "Updated data loaded successfully."
+            "Updated database load completed successfully."
         )
 
     except Exception as e:
@@ -220,12 +403,16 @@ def main():
             f"Updated database load failed: {e}"
         )
 
+        raise
+
     # ====================================================
-    # Completion
+    # COMPLETION
     # ====================================================
 
     print("=" * 80)
-    print("Data pipeline completed successfully")
+    print(
+        "Data pipeline completed successfully"
+    )
 
     logger.info(
         "ETL Pipeline Completed Successfully"
