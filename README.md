@@ -3,7 +3,7 @@
 
 ## Overview
 
-This project is an end-to-end ETL (Extract, Transform, Load) pipeline developed as part of the Waymark Data Engineering Take Home Assessment.
+This project is an end-to-end ETL (Extract, Transform, Load) pipeline developed as part of the  Data Engineering Take Home Assessment.
 
 The pipeline ingests patient membership and claim files from multiple insurance clients, performs data validation and cleansing, transforms the data into a standardized format, joins membership and claims information, derives business metrics, and prepares the data for loading into a PostgreSQL database.
 
@@ -159,7 +159,7 @@ src/database/connection.py
 Example:
 
 python
-DATABASE_URL = "postgresql://username:password@localhost:5432/waymark"
+DATABASE_URL = "postgresql://username:password@localhost:5432/"
 
 
 If PostgreSQL is unavailable, the loading step can be commented out while validating the ETL logic.
