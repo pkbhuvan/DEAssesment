@@ -1,5 +1,5 @@
 # DEAssesment
-# Waymark Data Engineering Take Home Assessment
+#
 
 ## Overview
 
