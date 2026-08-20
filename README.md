@@ -25,11 +25,7 @@ DEAssessment/
 │
 ├── src/
 │
-│   ├── parser/
-│   │   ├── client_a_parser.py
-│   │   └── client_a_claim_parser.py
-│   │
-│   ├── validation/
+│   │   ├── validation/
 │   │   ├── claim_validation.py
 │   │   ├── date_validation.py
 │   │   ├── duplicate_validation.py
@@ -162,7 +158,8 @@ python
 DATABASE_URL = "postgresql://username:password@localhost:5432/"
 
 
-If PostgreSQL is unavailable, the loading step can be commented out while validating the ETL logic.
+If PostgreSQL is unavailable, the loading can be skipped by setting SKIP_DB_LOAD = True in src/database/load_data.py.
+Change the value to False and ensure PostgreSQL is running and the connection settings are configured correctly.
 
 ---
 
@@ -206,9 +203,6 @@ Logs are generated during each ETL step to provide visibility into:
 
 # Future Improvements
 
-- Support Client B parser.
-- Implement incremental loading for Set 2.
-- Support upsert logic.
 - Add Docker support.
 - Add CI/CD pipeline.
 - Improve database indexing.
@@ -219,4 +213,4 @@ Logs are generated during each ETL step to provide visibility into:
 # Author
 
 Prepared by:
-Kalyan
+Kalyan Bhuvanesh
