@@ -16,12 +16,12 @@ DEAssessment/
 │
 ├── data/
 │   └── raw/
-│       ├── Patient-membership-clientA-202301.xlsx
-│       ├── Patient-membership-clientA-202302.xlsx
 │       ├── Patient-membership-clientA-202307.xlsx
-│       ├── Patient-claim-clientA-202301.xlsx
-│       ├── Patient-claim-clientA-202302.xlsx
-│       └── Patient-claim-clientA-202307.xlsx
+│       ├── Patient-membership-clientA-202308.xlsx
+│       ├── Patient-membership-clientB-202307.xlsx
+│       ├── Patient-claim-clientA-202307.xlsx
+│       ├── Patient-claim-clientA-202308.xlsx
+│       └── Patient-claim-clientB-202307.xlsx
 │
 ├── src/
 │   ├── validation/

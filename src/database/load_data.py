@@ -1,7 +1,7 @@
 from src.database.connection import engine
 from src.utils.logger import logger
 
-SKIP_DB_LOAD = True # True = skip PostgreSQL locally
+skip_db_load = True # True = skip PostgreSQL locally
                     # False = To enble PostgreSQL
 
 def load_dataframe(df, table_name):
@@ -9,7 +9,7 @@ def load_dataframe(df, table_name):
     Load any DataFrame into the specified PostgreSQL table.
     """
 
-    if SKIP_DB_LOAD:
+    if skip_db_load:
         logger.info(f"Skipping PostgreSQL load for {table_name}.")
         print(f"Skipping PostgreSQL load for {table_name} locally.")
         return

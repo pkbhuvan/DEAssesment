@@ -1053,3 +1053,37 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 2026-08-20 11:06:37 | INFO | Skipping PostgreSQL load for missing_members.
 2026-08-20 11:06:37 | INFO | Updated database load completed successfully.
 2026-08-20 11:06:37 | INFO | ETL Pipeline Completed Successfully
+2026-08-20 12:17:56 | INFO | Starting ETL Pipeline
+2026-08-20 12:17:57 | INFO | Membership Records: 18
+2026-08-20 12:17:57 | INFO | Claim Records: 33
+2026-08-20 12:17:57 | INFO | Initial Joined Records: 26
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for members.
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for claims.
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for member_claims.
+2026-08-20 12:17:57 | INFO | Initial database load completed successfully.
+2026-08-20 12:17:57 | INFO | Members After Upsert: 20
+2026-08-20 12:17:57 | INFO | Claims After Upsert: 68
+2026-08-20 12:17:57 | INFO | Missing Members: 5
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for members.
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for claims.
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for member_claims.
+2026-08-20 12:17:57 | INFO | Skipping PostgreSQL load for missing_members.
+2026-08-20 12:17:57 | INFO | Updated database load completed successfully.
+2026-08-20 12:17:57 | INFO | ETL Pipeline Completed Successfully
+2026-08-20 12:32:41 | INFO | Starting ETL Pipeline
+2026-08-20 12:32:41 | INFO | Membership Records: 18
+2026-08-20 12:32:41 | INFO | Claim Records: 33
+2026-08-20 12:32:41 | INFO | Initial Joined Records: 26
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for members.
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for claims.
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for member_claims.
+2026-08-20 12:32:41 | INFO | Initial database load completed successfully.
+2026-08-20 12:32:41 | INFO | Members After Upsert: 20
+2026-08-20 12:32:41 | INFO | Claims After Upsert: 68
+2026-08-20 12:32:41 | INFO | Missing Members: 5
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for members.
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for claims.
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for member_claims.
+2026-08-20 12:32:41 | INFO | Skipping PostgreSQL load for missing_members.
+2026-08-20 12:32:41 | INFO | Updated database load completed successfully.
+2026-08-20 12:32:41 | INFO | ETL Pipeline Completed Successfully
