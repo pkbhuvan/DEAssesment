@@ -24,8 +24,7 @@ DEAssessment/
 │       └── Patient-claim-clientA-202307.xlsx
 │
 ├── src/
-│
-│   │   ├── validation/
+│   ├── validation/
 │   │   ├── claim_validation.py
 │   │   ├── date_validation.py
 │   │   ├── duplicate_validation.py
